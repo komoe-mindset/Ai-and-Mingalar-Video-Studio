@@ -1,0 +1,6 @@
+{
+  "name": "AI Video Masterclass",
+  "description": "Production-grade AI commercial workflow with character turnaround sheets, location freeze rules, storyboard blueprints, and Google Vids assembly.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
