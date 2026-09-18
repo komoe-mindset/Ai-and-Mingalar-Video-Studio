@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { X, Sparkles, ExternalLink, Copy, Check, ArrowRight, Bot, Layers, Image as ImageIcon, Music } from 'lucide-react';
 import { GEMINI_APPS, GeminiAppInfo, WORKFLOW_GEMINI_APPS, VISUAL_REF_GEMINI_APPS, AUDIO_GEMINI_APPS } from '../data/geminiApps';
 import { Language, TabType } from '../types';
@@ -22,6 +22,66 @@ export const GeminiAppsModal: React.FC<GeminiAppsModalProps> = ({
 }) => {
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [filter, setFilter] = useState<ModalFilter>('all');
+
+  const modalRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const previousActiveElement = useRef<HTMLElement | null>(null);
+
+  // Accessible ESC key listener, background scroll lock, and focus trap
+  useEffect(() => {
+    if (!isOpen) return;
+
+    previousActiveElement.current = document.activeElement as HTMLElement;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    // Focus close button smoothly on mount
+    const timer = setTimeout(() => {
+      closeButtonRef.current?.focus();
+    }, 50);
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Accessible ESC key listener
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        onClose();
+        return;
+      }
+
+      // Accessible Focus Trapping
+      if (e.key === 'Tab' && modalRef.current) {
+        const focusable = modalRef.current.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+
+        if (focusable.length === 0) return;
+
+        const firstEl = focusable[0];
+        const lastEl = focusable[focusable.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstEl) {
+            e.preventDefault();
+            lastEl.focus();
+          }
+        } else {
+          if (document.activeElement === lastEl) {
+            e.preventDefault();
+            firstEl.focus();
+          }
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = originalOverflow;
+      previousActiveElement.current?.focus();
+    };
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -57,26 +117,32 @@ export const GeminiAppsModal: React.FC<GeminiAppsModalProps> = ({
       onClick={onClose}
     >
       <div
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="gemini-modal-title"
+        aria-describedby="gemini-modal-desc"
+        tabIndex={-1}
         id="gemini-apps-modal-content"
-        className="glass-panel border border-indigo-500/40 bg-slate-950/95 max-w-2xl w-full rounded-2xl shadow-2xl overflow-hidden p-5 sm:p-6 space-y-5 relative"
+        className="glass-panel border border-indigo-500/40 bg-slate-950/95 max-w-2xl w-full rounded-2xl shadow-2xl overflow-hidden p-5 sm:p-6 space-y-5 relative focus:outline-none"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex items-start justify-between border-b border-slate-800 pb-4">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-cyan-400 flex items-center justify-center text-white shadow-lg shadow-indigo-500/25 shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-cyan-400 flex items-center justify-center text-white shadow-lg shadow-indigo-500/25 shrink-0" aria-hidden="true">
               <Bot className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center space-x-2 flex-wrap gap-y-1">
-                <h3 className="text-base sm:text-lg font-bold text-white">
+                <h3 id="gemini-modal-title" className="text-base sm:text-lg font-bold text-white">
                   {currentLang === 'en' ? 'Official Gemini Mini Apps & Visual References' : 'တရားဝင် Gemini Mini Apps & Visual References'}
                 </h3>
                 <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-mono border border-indigo-500/30">
                   {GEMINI_APPS.length} Pre-Trained Gems
                 </span>
               </div>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p id="gemini-modal-desc" className="text-xs text-slate-400 mt-0.5">
                 {currentLang === 'en'
                   ? 'Access pre-engineered Gemini assistants for production workflow blocks and AI video visual references.'
                   : 'ထုတ်လုပ်ရေးကဏ္ဍများနှင့် AI ဗီဒီယို Visual Reference များအတွက် ကြိုတင်ပြင်ဆင်ထားသော Gemini Apps များ'}
@@ -84,16 +150,21 @@ export const GeminiAppsModal: React.FC<GeminiAppsModalProps> = ({
             </div>
           </div>
           <button
+            ref={closeButtonRef}
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-white bg-slate-900 border border-slate-800 transition cursor-pointer"
-            aria-label="Close modal"
+            className="p-2 rounded-xl text-slate-400 hover:text-white bg-slate-900 border border-slate-800 transition cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+            aria-label={currentLang === 'en' ? 'Close Gemini Apps modal' : 'Gemini Apps ဝင်းဒိုးကို ပိတ်မည်'}
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Filter Navigation Tabs */}
-        <div className="flex items-center space-x-1.5 p-1 bg-slate-900/90 rounded-xl border border-slate-800/80 text-xs font-semibold">
+        <div
+          role="group"
+          aria-label={currentLang === 'en' ? 'Filter Gemini Apps' : 'Gemini Apps စစ်ထုတ်ရန်'}
+          className="flex items-center space-x-1.5 p-1 bg-slate-900/90 rounded-xl border border-slate-800/80 text-xs font-semibold"
+        >
           <button
             id="filter-all-gems-btn"
             onClick={() => setFilter('all')}

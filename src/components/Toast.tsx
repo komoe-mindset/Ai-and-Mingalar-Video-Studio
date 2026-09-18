@@ -5,7 +5,7 @@ interface ToastProps {
   message: string | null;
 }
 
-export const Toast: React.FC<ToastProps> = ({ message }) => {
+export const Toast: React.FC<ToastProps> = React.memo(({ message }) => {
   if (!message) return null;
 
   return (
@@ -17,4 +17,4 @@ export const Toast: React.FC<ToastProps> = ({ message }) => {
       <span>{message}</span>
     </div>
   );
-};
+});

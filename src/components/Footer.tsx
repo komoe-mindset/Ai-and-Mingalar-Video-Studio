@@ -6,7 +6,7 @@ interface FooterProps {
   currentLang: Language;
 }
 
-export const Footer: React.FC<FooterProps> = ({ currentLang }) => {
+export const Footer: React.FC<FooterProps> = React.memo(({ currentLang }) => {
   const t = translations[currentLang];
 
   return (
@@ -21,4 +21,4 @@ export const Footer: React.FC<FooterProps> = ({ currentLang }) => {
       </div>
     </footer>
   );
-};
+});

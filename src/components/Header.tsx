@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Sparkles, Languages, Menu, X, Wand2, Bot } from 'lucide-react';
 import { Language, TabType } from '../types';
 import { translations } from '../data/translations';
+import { GEMINI_APPS } from '../data/geminiApps';
 
 interface HeaderProps {
   currentLang: Language;
@@ -11,7 +12,7 @@ interface HeaderProps {
   onOpenGeminiModal: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({
+export const Header: React.FC<HeaderProps> = React.memo(({
   currentLang,
   setLanguage,
   activeTab,
@@ -118,7 +119,9 @@ export const Header: React.FC<HeaderProps> = ({
             id="mobile-nav-toggle"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden p-2 rounded-xl text-slate-400 hover:text-white bg-slate-900/80 border border-slate-800"
-            aria-label="Toggle mobile menu"
+            aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-nav-drawer"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -127,7 +130,10 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden mt-3 pt-3 border-t border-slate-800 space-y-1.5 pb-2 animate-in fade-in duration-150">
+        <div
+          id="mobile-nav-drawer"
+          className="md:hidden mt-3 pt-3 border-t border-slate-800 space-y-1.5 pb-2 animate-in fade-in duration-150"
+        >
           <button
             onClick={() => {
               setMobileMenuOpen(false);
@@ -140,7 +146,7 @@ export const Header: React.FC<HeaderProps> = ({
               <span>{currentLang === 'en' ? 'Launch Gemini Mini Apps' : 'Gemini Mini Apps ဖွင့်ရန်'}</span>
             </span>
             <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/30 text-indigo-200 font-mono">
-              3 Apps
+              {GEMINI_APPS.length} Apps
             </span>
           </button>
 
@@ -219,4 +225,4 @@ export const Header: React.FC<HeaderProps> = ({
       )}
     </header>
   );
-};
+});
