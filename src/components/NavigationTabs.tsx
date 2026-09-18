@@ -30,6 +30,8 @@ export const NavigationTabs: React.FC<NavigationTabsProps> = React.memo(({
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // Keyboard navigation complying with WAI-ARIA tablist pattern:
+  // Arrow keys (Right/Down, Left/Up) navigate between tabs; Home/End jump to ends; Enter/Space activate tab.
   const handleKeyDown = (e: React.KeyboardEvent, index: number) => {
     let targetIndex = -1;
 
@@ -45,6 +47,10 @@ export const NavigationTabs: React.FC<NavigationTabsProps> = React.memo(({
     } else if (e.key === 'End') {
       e.preventDefault();
       targetIndex = tabs.length - 1;
+    } else if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleTabClick(tabs[index].id);
+      return;
     }
 
     if (targetIndex !== -1) {
@@ -62,6 +68,7 @@ export const NavigationTabs: React.FC<NavigationTabsProps> = React.memo(({
     >
       <div
         role="tablist"
+        aria-orientation="horizontal"
         aria-label="Workflow Stages"
         className="max-w-7xl mx-auto flex space-x-2 min-w-max"
       >

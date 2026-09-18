@@ -3,33 +3,41 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useCallback, useRef, useEffect, Suspense, lazy } from 'react';
+import React, {
+  useState,
+  useCallback,
+  useRef,
+  useEffect,
+  startTransition,
+  lazy,
+} from 'react';
 import { Header } from './components/Header';
 import { NavigationTabs } from './components/NavigationTabs';
 import { Footer } from './components/Footer';
 import { Toast } from './components/Toast';
 import { GeminiAppsModal } from './components/GeminiAppsModal';
+import { MasterPromptModal } from './components/MasterPromptModal';
 import { TabLoadingSkeleton } from './components/TabLoadingSkeleton';
 import { Language, TabType } from './types';
 
-// Code-split heavy tab views with React.lazy to reduce initial bundle size and boost Lighthouse score
+// Code-split heavy tab views with React.lazy() to optimize bundle size, LCP, and INP scores
 const OverviewTab = lazy(() =>
-  import('./components/OverviewTab').then((m) => ({ default: m.OverviewTab }))
+  import('./components/OverviewTab').then((module) => ({ default: module.OverviewTab }))
 );
 const CharacterSheetTab = lazy(() =>
-  import('./components/CharacterSheetTab').then((m) => ({ default: m.CharacterSheetTab }))
+  import('./components/CharacterSheetTab').then((module) => ({ default: module.CharacterSheetTab }))
 );
 const LocationSheetTab = lazy(() =>
-  import('./components/LocationSheetTab').then((m) => ({ default: m.LocationSheetTab }))
+  import('./components/LocationSheetTab').then((module) => ({ default: module.LocationSheetTab }))
 );
 const StoryboardBlueprintTab = lazy(() =>
-  import('./components/StoryboardBlueprintTab').then((m) => ({ default: m.StoryboardBlueprintTab }))
+  import('./components/StoryboardBlueprintTab').then((module) => ({ default: module.StoryboardBlueprintTab }))
 );
 const AssemblyTab = lazy(() =>
-  import('./components/AssemblyTab').then((m) => ({ default: m.AssemblyTab }))
+  import('./components/AssemblyTab').then((module) => ({ default: module.AssemblyTab }))
 );
 const CalculatorTab = lazy(() =>
-  import('./components/CalculatorTab').then((m) => ({ default: m.CalculatorTab }))
+  import('./components/CalculatorTab').then((module) => ({ default: module.CalculatorTab }))
 );
 
 export default function App() {
@@ -37,6 +45,8 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<TabType>('overview');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [geminiModalOpen, setGeminiModalOpen] = useState(false);
+  const [masterPromptModalOpen, setMasterPromptModalOpen] = useState(false);
+  const [masterPromptMode, setMasterPromptMode] = useState<'full' | 'stage1'>('full');
 
   // Debounced toast timer ref to prevent memory leaks during rapid copy actions
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -47,6 +57,24 @@ export default function App() {
         clearTimeout(toastTimerRef.current);
       }
     };
+  }, []);
+
+  // Idle background prefetching for remaining tab chunks to keep INP near 0ms
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+      const idleCallbackId = (window as unknown as { requestIdleCallback: (cb: () => void) => number }).requestIdleCallback(() => {
+        import('./components/CharacterSheetTab');
+        import('./components/LocationSheetTab');
+        import('./components/StoryboardBlueprintTab');
+        import('./components/AssemblyTab');
+        import('./components/CalculatorTab');
+      });
+      return () => {
+        if ('cancelIdleCallback' in window) {
+          (window as unknown as { cancelIdleCallback: (id: number) => void }).cancelIdleCallback(idleCallbackId);
+        }
+      };
+    }
   }, []);
 
   // Memoized handlers to eliminate unnecessary re-renders of memoized Header, NavigationTabs, and Modal
@@ -61,7 +89,10 @@ export default function App() {
   }, []);
 
   const handleSelectTab = useCallback((tab: TabType) => {
-    setActiveTab(tab);
+    // Wrap state update in startTransition to prioritize user input responsiveness (optimizing INP)
+    startTransition(() => {
+      setActiveTab(tab);
+    });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
@@ -71,6 +102,15 @@ export default function App() {
 
   const handleCloseGeminiModal = useCallback(() => {
     setGeminiModalOpen(false);
+  }, []);
+
+  const handleOpenMasterPrompt = useCallback((mode: 'full' | 'stage1' = 'full') => {
+    setMasterPromptMode(mode);
+    setMasterPromptModalOpen(true);
+  }, []);
+
+  const handleCloseMasterPrompt = useCallback(() => {
+    setMasterPromptModalOpen(false);
   }, []);
 
   const handleSetLanguage = useCallback((lang: Language) => {
@@ -86,6 +126,7 @@ export default function App() {
         activeTab={activeTab}
         setActiveTab={handleSelectTab}
         onOpenGeminiModal={handleOpenGeminiModal}
+        onOpenMasterPrompt={() => handleOpenMasterPrompt('full')}
       />
 
       {/* Main Workflow Tabs Navigation */}
@@ -95,7 +136,7 @@ export default function App() {
         currentLang={currentLang}
       />
 
-      {/* Main Content Area with Suspense Fallback Skeleton */}
+      {/* Main Content Area with React.Suspense Fallback Skeleton */}
       <main className="flex-grow px-4 sm:px-6 lg:px-8 py-6 max-w-7xl mx-auto w-full">
         <div
           role="tabpanel"
@@ -104,7 +145,7 @@ export default function App() {
           tabIndex={0}
           className="outline-none"
         >
-          <Suspense fallback={<TabLoadingSkeleton />}>
+          <React.Suspense fallback={<TabLoadingSkeleton />}>
             {activeTab === 'overview' && (
               <OverviewTab
                 currentLang={currentLang}
@@ -116,6 +157,7 @@ export default function App() {
               <CharacterSheetTab
                 currentLang={currentLang}
                 onCopySuccess={showToast}
+                onOpenMasterPrompt={handleOpenMasterPrompt}
               />
             )}
 
@@ -145,7 +187,7 @@ export default function App() {
                 currentLang={currentLang}
               />
             )}
-          </Suspense>
+          </React.Suspense>
         </div>
       </main>
 
@@ -159,6 +201,15 @@ export default function App() {
         currentLang={currentLang}
         onSelectTab={handleSelectTab}
         onCopySuccess={showToast}
+      />
+
+      {/* AI Commercial Creative Director Master Prompt Modal for ChatGPT & Claude */}
+      <MasterPromptModal
+        isOpen={masterPromptModalOpen}
+        onClose={handleCloseMasterPrompt}
+        currentLang={currentLang}
+        onCopySuccess={showToast}
+        initialMode={masterPromptMode}
       />
 
       {/* Toast Notification Container */}

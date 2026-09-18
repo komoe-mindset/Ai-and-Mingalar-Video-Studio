@@ -1,23 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { Copy, Check, Sparkles, AlertTriangle, UserCheck, ShieldCheck, ExternalLink, Bot, Palette } from 'lucide-react';
+import React, { useState } from 'react';
+import { Copy, Check, Sparkles, AlertTriangle, UserCheck, ShieldCheck, ExternalLink, Bot, Palette, Workflow, FileText, ArrowUpRight } from 'lucide-react';
 import { Language } from '../types';
 import { translations } from '../data/translations';
 import { GeminiAppCard } from './GeminiAppCard';
 import { GEMINI_APPS, VISUAL_REF_GEMINI_APPS } from '../data/geminiApps';
+import { FULL_MASTER_PROMPT, STAGE1_CHARACTER_SHEET_PROMPT } from '../data/masterPrompt';
 
 interface CharacterSheetTabProps {
   currentLang: Language;
   onCopySuccess: (msg: string) => void;
+  onOpenMasterPrompt?: (initialMode?: 'full' | 'stage1') => void;
 }
 
 export const CharacterSheetTab: React.FC<CharacterSheetTabProps> = ({
   currentLang,
   onCopySuccess,
+  onOpenMasterPrompt,
 }) => {
   const t = translations[currentLang];
   const geminiApp = GEMINI_APPS[0];
   const cartoonAvatarGem = VISUAL_REF_GEMINI_APPS[0];
   const [showCartoonRef, setShowCartoonRef] = useState(false);
+  const [copiedMaster, setCopiedMaster] = useState<'full' | 'stage1' | null>(null);
 
   // Generator form states
   const [gender, setGender] = useState('Myanmar woman in her late 20s');
@@ -28,6 +32,35 @@ export const CharacterSheetTab: React.FC<CharacterSheetTabProps> = ({
     'minimalist modern navy blue buttoned linen shirt with rolled-up sleeves, silver wrist watch'
   );
   const [copied, setCopied] = useState(false);
+
+  const handleCopyMasterPrompt = (mode: 'full' | 'stage1') => {
+    const text = mode === 'full' ? FULL_MASTER_PROMPT : STAGE1_CHARACTER_SHEET_PROMPT;
+    navigator.clipboard.writeText(text);
+    setCopiedMaster(mode);
+    onCopySuccess(
+      currentLang === 'en'
+        ? mode === 'full'
+          ? 'Creative Director Master Prompt copied! Paste into ChatGPT.'
+          : 'Stage 1 Character Sheet Master Prompt copied!'
+        : mode === 'full'
+        ? 'Creative Director Master Prompt ကို ကူးယူပြီးပါပြီ! ChatGPT တွင် အသုံးပြုပါ။'
+        : 'Stage 1 Character Sheet Prompt ကို ကူးယူပြီးပါပြီ!'
+    );
+    setTimeout(() => setCopiedMaster(null), 2500);
+  };
+
+  const handleLaunchChatGPTWithMaster = (mode: 'full' | 'stage1' = 'full') => {
+    const text = mode === 'full' ? FULL_MASTER_PROMPT : STAGE1_CHARACTER_SHEET_PROMPT;
+    navigator.clipboard.writeText(text);
+    setCopiedMaster(mode);
+    onCopySuccess(
+      currentLang === 'en'
+        ? 'Master Prompt copied! Opening ChatGPT in new tab... Press Ctrl+V to paste.'
+        : 'Master Prompt ကို ကူးယူပြီးပါပြီ! ChatGPT တွင် Ctrl+V ဖြင့် Paste လုပ်ပါ။'
+    );
+    setTimeout(() => setCopiedMaster(null), 3000);
+    window.open('https://chatgpt.com', '_blank', 'noopener,noreferrer');
+  };
 
   // Generate Character Prompt
   const generatedPrompt = `A hyper-detailed professional Character Turnaround Sheet for commercial video production.
@@ -246,6 +279,118 @@ LIGHTING & BACKGROUND: Perfectly even studio soft lighting, no harsh shadows, pl
           <div className="bg-slate-900/90 p-4 rounded-xl border border-slate-800 space-y-1.5">
             <span className="text-rose-400 font-bold block">{t.m4_title}</span>
             <p className="text-slate-400 leading-relaxed">{t.m4_desc}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* ChatGPT Commercial Creative Director Master Prompt Card */}
+      <div className="glass-panel p-6 rounded-2xl border border-emerald-500/35 bg-gradient-to-br from-emerald-950/25 via-slate-900/90 to-slate-950 space-y-4 shadow-xl relative overflow-hidden">
+        <div className="absolute -right-20 -bottom-20 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 relative z-10">
+          <div className="space-y-1.5 max-w-2xl">
+            <div className="flex items-center space-x-2 flex-wrap gap-y-1">
+              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-mono font-bold border border-emerald-500/30 flex items-center space-x-1">
+                <Bot className="w-3.5 h-3.5" />
+                <span>ChatGPT & Claude System</span>
+              </span>
+              <span className="text-[11px] text-slate-400 font-mono">
+                Sequential 11-Stage Production Lock
+              </span>
+            </div>
+
+            <h3 className="text-lg sm:text-xl font-bold text-white flex items-center space-x-2">
+              <Sparkles className="w-5 h-5 text-emerald-400 shrink-0" />
+              <span>{t.master_prompt_card_title}</span>
+            </h3>
+
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              {t.master_prompt_card_desc}
+            </p>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex flex-wrap sm:flex-nowrap items-center gap-2.5 shrink-0 relative z-10">
+            <button
+              onClick={() => handleCopyMasterPrompt('full')}
+              className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition flex items-center space-x-1.5 cursor-pointer shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+            >
+              {copiedMaster === 'full' ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-emerald-400" />
+                  <span className="text-emerald-300">{t.btn_copied}</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-3.5 h-3.5 text-slate-400" />
+                  <span>{t.btn_copy_master_prompt}</span>
+                </>
+              )}
+            </button>
+
+            <button
+              onClick={() => handleLaunchChatGPTWithMaster('full')}
+              className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold transition flex items-center space-x-1.5 cursor-pointer shadow-md shadow-emerald-600/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+            >
+              <Bot className="w-4 h-4" />
+              <span>{t.btn_launch_chatgpt}</span>
+              <ExternalLink className="w-3.5 h-3.5 text-emerald-200" />
+            </button>
+
+            {onOpenMasterPrompt && (
+              <button
+                onClick={() => onOpenMasterPrompt('full')}
+                className="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-emerald-300 border border-emerald-500/40 text-xs font-semibold transition flex items-center space-x-1 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+              >
+                <span>{t.btn_inspect_stages}</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Quick Highlights of Stage 1 & Lock Rules */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs relative z-10">
+          <div className="p-3 bg-slate-900/80 rounded-xl border border-slate-800 space-y-1">
+            <span className="font-bold text-emerald-400 flex items-center space-x-1.5">
+              <span>👤</span>
+              <span>
+                {currentLang === 'en' ? 'Stage 1: Photo Intake' : 'Stage 1: ဓာတ်ပုံ စစ်ဆေးခြင်း'}
+              </span>
+            </span>
+            <p className="text-slate-400 text-[11px] leading-relaxed">
+              {currentLang === 'en'
+                ? 'Asks user for character image first. Preserves exact bone structure, eyes, hair & skin tone without AI hallucination.'
+                : 'စတင်သည်နှင့် ဓာတ်ပုံတောင်းခံပြီး မူရင်းမျက်နှာ၊ ဆံပင်နှင့် မျက်လုံးများကို မူလအတိုင်း ထိန်းသိမ်းဆွဲပေးသည်။'}
+            </p>
+          </div>
+
+          <div className="p-3 bg-slate-900/80 rounded-xl border border-slate-800 space-y-1">
+            <span className="font-bold text-emerald-400 flex items-center space-x-1.5">
+              <span>🔒</span>
+              <span>
+                {currentLang === 'en' ? 'Permanent Character Lock' : 'ဇာတ်ကောင် Identity Lock'}
+              </span>
+            </span>
+            <p className="text-slate-400 text-[11px] leading-relaxed">
+              {currentLang === 'en'
+                ? 'Locks identity before moving to Product Sheet, Location Sheet, and Script to prevent face-morphing across scenes.'
+                : 'ဇာတ်ကောင် Lock ခတ်ပြီးမှသာ ကုန်ပစ္စည်း၊ နေရာနှင့် Storyboard သို့ ကူးပြောင်းသဖြင့် လူပြောင်းလဲမှု လုံးဝမရှိစေပါ။'}
+            </p>
+          </div>
+
+          <div className="p-3 bg-slate-900/80 rounded-xl border border-slate-800 space-y-1">
+            <span className="font-bold text-emerald-400 flex items-center space-x-1.5">
+              <span>🚀</span>
+              <span>
+                {currentLang === 'en' ? 'Flow AI Agent Ready' : 'Flow AI Agent Master Ready'}
+              </span>
+            </span>
+            <p className="text-slate-400 text-[11px] leading-relaxed">
+              {currentLang === 'en'
+                ? 'Concludes with a unified Flow AI Agent prompt linking the 4 separate images (Character, Product, Location, Storyboard).'
+                : 'အပြီးသတ်တွင် Flow AI Agent ဗီဒီယို မော်ဒယ်အတွက် တစ်ခုတည်းသော Master Prompt ကို တိုက်ရိုက် ထုတ်ပေးသည်။'}
+            </p>
           </div>
         </div>
       </div>

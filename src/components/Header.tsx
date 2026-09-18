@@ -10,6 +10,7 @@ interface HeaderProps {
   activeTab: TabType;
   setActiveTab: (tab: TabType) => void;
   onOpenGeminiModal: () => void;
+  onOpenMasterPrompt?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = React.memo(({
@@ -18,6 +19,7 @@ export const Header: React.FC<HeaderProps> = React.memo(({
   activeTab,
   setActiveTab,
   onOpenGeminiModal,
+  onOpenMasterPrompt,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const t = translations[currentLang];
@@ -104,6 +106,19 @@ export const Header: React.FC<HeaderProps> = React.memo(({
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
           </button>
 
+          {/* Quick Action: ChatGPT Master Prompt Launcher */}
+          {onOpenMasterPrompt && (
+            <button
+              id="btn-quick-master-prompt"
+              onClick={onOpenMasterPrompt}
+              className="inline-flex items-center space-x-1.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 text-xs font-semibold px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl transition shadow-sm cursor-pointer"
+              title="Open AI Commercial Creative Director Master Prompt for ChatGPT"
+            >
+              <Sparkles className="w-4 h-4 text-emerald-400" />
+              <span className="hidden sm:inline">{t.btn_chatgpt_master_prompt}</span>
+            </button>
+          )}
+
           {/* Quick Action: Prompt Builder */}
           <button
             id="btn-quick-prompt-builder"
@@ -149,6 +164,24 @@ export const Header: React.FC<HeaderProps> = React.memo(({
               {GEMINI_APPS.length} Apps
             </span>
           </button>
+
+          {onOpenMasterPrompt && (
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenMasterPrompt();
+              }}
+              className="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between bg-emerald-600/25 text-emerald-200 border border-emerald-500/40 my-1"
+            >
+              <span className="flex items-center space-x-2.5">
+                <Sparkles className="w-4 h-4 text-emerald-400" />
+                <span>{currentLang === 'en' ? 'ChatGPT Master Prompt' : 'ChatGPT Master Prompt ဖွင့်ရန်'}</span>
+              </span>
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/30 text-emerald-200 font-mono">
+                11 Stages
+              </span>
+            </button>
+          )}
 
           <button
             onClick={() => handleTabSelect('overview')}

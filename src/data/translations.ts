@@ -160,7 +160,15 @@ export const translations: Record<Language, TranslationDictionary> = {
     reusable_val: "100% Reusable Character & Location Library",
     footer_credits: "Based on the 'AI Video Generation for AI Mindset: From Character to Commercial' Masterclass Guide.",
     lock_rules_tag: "3 Locks Enforced:",
-    lock_rules_text: "Identical face & proportions across all panels • Plain neutral grey backdrop • Soft diffuse lighting with mouth closed."
+    lock_rules_text: "Identical face & proportions across all panels • Plain neutral grey backdrop • Soft diffuse lighting with mouth closed.",
+    btn_chatgpt_master_prompt: "ChatGPT Master Prompt",
+    master_prompt_badge: "Creative Director Master Prompt",
+    master_prompt_card_title: "AI Commercial Creative Director (ChatGPT Master Prompt)",
+    master_prompt_card_desc: "Feed this Master Prompt to ChatGPT (GPT-4o) or Claude. It acts as your Creative Director, starting with Stage 1 (Character Reference Intake & 5-Panel Turnaround Sheet), locking identity before moving to product, location, script, and Flow AI Agent prompt.",
+    btn_copy_master_prompt: "Copy Full Master Prompt",
+    btn_copy_stage1_prompt: "Copy Stage 1 (Character Sheet)",
+    btn_launch_chatgpt: "Launch in ChatGPT",
+    btn_inspect_stages: "Inspect 11 Stages & Rules",
   },
   my: {
     app_title: "AI ဗီဒီယို Masterclass",
@@ -321,6 +329,14 @@ export const translations: Record<Language, TranslationDictionary> = {
     reusable_val: "၁၀၀% ပြန်သုံးနိုင်သော Character & Location Library",
     footer_credits: "AI Video Generation for AI Mindset: From Character to Commercial သင်ရိုးညွှန်းတမ်းကို အခြေခံထားပါသည်။",
     lock_rules_tag: "စည်းမျဉ်း ၃ ခု မဖြစ်မနေ လိုက်နာရန်:",
-    lock_rules_text: "Panel အားလုံးတွင် မျက်နှာ၊ အရိုးဖွဲ့စည်းပုံ၊ အဝတ်အစားတူညီရမည် • နောက်ခံ မီးခိုးဖျော့ ရိုးရိုးသာ ဖြစ်ရမည် • ပါးစပ်ပိတ်၍ အလင်းညီညာရမည်။"
+    lock_rules_text: "Panel အားလုံးတွင် မျက်နှာ၊ အရိုးဖွဲ့စည်းပုံ၊ အဝတ်အစားတူညီရမည် • နောက်ခံ မီးခိုးဖျော့ ရိုးရိုးသာ ဖြစ်ရမည် • ပါးစပ်ပိတ်၍ အလင်းညီညာရမည်။",
+    btn_chatgpt_master_prompt: "ChatGPT Master Prompt",
+    master_prompt_badge: "Creative Director Master Prompt",
+    master_prompt_card_title: "AI Commercial Creative Director (ChatGPT Master Prompt စနစ်)",
+    master_prompt_card_desc: "ChatGPT (သို့မဟုတ် Claude) ကို ကြော်ငြာဒါရိုက်တာအဖြစ် ပြောင်းလဲပေးမည့် Master Prompt ဖြစ်သည်။ အဆင့် ၁ (ဇာတ်ကောင်ဓာတ်ပုံစစ်ဆေးခြင်းနှင့် Turnaround Sheet ထုတ်ယူခြင်း) မှ စတင်ကာ Flow AI ဗီဒီယိုအထိ အဆင့်ဆင့် Lock ခတ်ပေးပါမည်။",
+    btn_copy_master_prompt: "Master Prompt အပြည့်အစုံ ကူးယူမည်",
+    btn_copy_stage1_prompt: "Stage 1 (Character Sheet) ကူးယူမည်",
+    btn_launch_chatgpt: "ChatGPT တွင် ဖွင့်မည်",
+    btn_inspect_stages: "အဆင့် ၁၁ ဆင့်ကို ကြည့်ရှုမည်",
   }
 };
