@@ -3,6 +3,7 @@ import { Link2, Copy, Check, Wand2, Film, Video, Mic2, ExternalLink, Bot } from 
 import { Language } from '../types';
 import { translations } from '../data/translations';
 import { GeminiAppCard } from './GeminiAppCard';
+import { CameraAngleResourceCard } from './CameraAngleResourceCard';
 import { GEMINI_APPS } from '../data/geminiApps';
 
 interface StoryboardBlueprintTabProps {
@@ -100,6 +101,12 @@ Keep the visual grade and spokesperson clothing strictly identical in every scen
         description={currentLang === 'en' ? geminiApp.descEn : geminiApp.descMy}
         url={geminiApp.url}
         accentColor="cyan"
+        currentLang={currentLang}
+        onCopySuccess={onCopySuccess}
+      />
+
+      {/* Camera Angle Learning Website for AI Video Resource & Cheat Sheet */}
+      <CameraAngleResourceCard
         currentLang={currentLang}
         onCopySuccess={onCopySuccess}
       />

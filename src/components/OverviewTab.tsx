@@ -2,7 +2,7 @@ import React from 'react';
 import { ArrowRight, Sparkles, XCircle, CheckCircle2, FolderGit2, Bot, ExternalLink, Headphones, Music } from 'lucide-react';
 import { TabType, Language } from '../types';
 import { translations } from '../data/translations';
-import { GEMINI_APPS, AUDIO_GEMINI_APPS } from '../data/geminiApps';
+import { GEMINI_APPS, VISUAL_REF_GEMINI_APPS, AUDIO_GEMINI_APPS } from '../data/geminiApps';
 
 interface OverviewTabProps {
   currentLang: Language;
@@ -324,24 +324,26 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ currentLang, onSelectT
               </div>
               <h3 className="text-xl font-bold text-white mt-1">
                 {currentLang === 'en'
-                  ? 'Visual References: Cartoon & Product Photography'
-                  : 'Visual References: ကာတွန်းနှင့် ကုန်ပစ္စည်းကြော်ငြာဓာတ်ပုံ'}
+                  ? 'Visual References & Cinematography Suite'
+                  : 'Visual References နှင့် ကင်မရာထောင့် လေ့လာရေး Suite'}
               </h3>
               <p className="text-xs sm:text-sm text-slate-400 mt-1">
                 {currentLang === 'en'
-                  ? 'Dedicated reference generators to lock 2D cartoon avatars, cartoon environments, and high-end commercial product packshots.'
-                  : '2D ကာတွန်းဇာတ်ကောင်၊ အခန်းနောက်ခံနှင့် ကုန်ပစ္စည်း Packshot များ တသမတ်တည်း ထိန်းသိမ်းရန် Visual Reference Gemini Apps များ။'}
+                  ? 'Dedicated reference generators to lock 2D cartoon avatars, cartoon environments, studio product packshots, and learn 20+ cinematic camera angles.'
+                  : '2D ကာတွန်းဇာတ်ကောင်၊ အခန်းနောက်ခံ၊ ကုန်ပစ္စည်း Packshot နှင့် ကင်မရာထောင့်ပေါင်း ၂၀ ကျော်ကို တိကျစွာ လေ့လာအသုံးပြုနိုင်သော Reference Apps များ။'}
               </p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {GEMINI_APPS.slice(3, 6).map((app) => {
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {VISUAL_REF_GEMINI_APPS.map((app) => {
               const borderCol =
                 app.accentColor === 'purple'
                   ? 'border-purple-500/40 hover:border-purple-400'
                   : app.accentColor === 'amber'
                   ? 'border-amber-500/40 hover:border-amber-400'
+                  : app.accentColor === 'cyan'
+                  ? 'border-cyan-500/40 hover:border-cyan-400'
                   : 'border-teal-500/40 hover:border-teal-400';
 
               const btnBg =
@@ -349,6 +351,8 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ currentLang, onSelectT
                   ? 'bg-purple-600 hover:bg-purple-500 text-white'
                   : app.accentColor === 'amber'
                   ? 'bg-amber-600 hover:bg-amber-500 text-white'
+                  : app.accentColor === 'cyan'
+                  ? 'bg-cyan-600 hover:bg-cyan-500 text-white'
                   : 'bg-teal-600 hover:bg-teal-500 text-white';
 
               return (

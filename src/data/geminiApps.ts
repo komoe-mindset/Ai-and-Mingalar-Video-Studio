@@ -131,6 +131,24 @@ export const VISUAL_REF_GEMINI_APPS: GeminiAppInfo[] = [
     accentColor: 'teal',
     icon: '📸',
   },
+  {
+    id: 'ref-camera-angle-learning',
+    category: 'visual_reference',
+    tagEn: 'Cinematography • Camera Angles',
+    tagMy: 'ရုပ်ရှင်ပညာ • ကင်မရာထောင့်များ',
+    tabKey: 'block3',
+    titleEn: 'Camera Angle Learning Website for AI Video',
+    titleMy: 'AI Video အတွက် Camera Angle လေ့လာရေး ဝဘ်ဆိုက်',
+    subtitleEn: 'Visual guide for 20+ camera angles, shot composition, lens framing & motion prompts',
+    subtitleMy: 'ကင်မရာထောင့်ပေါင်း ၂၀ ကျော်၊ Shot အကွာအဝေးနှင့် ဗီဒီယိုရွေ့လျားမှု လေ့လာရန် Visual Guide',
+    descEn:
+      'Dedicated visual learning reference (camera-angle.komoe.org) for mastering cinematic camera angles (Bird\'s eye, Low angle, Dutch angle, Worm\'s eye, Close-up, POV) and lens composition for AI video models like Veo 3.1, Kling, and Runway.',
+    descMy:
+      'AI ဗီဒီယိုများတွင် ကင်မရာထောင့်၊ အနီးအဝေးနှင့် Shot အမျိုးအစားများ မှန်ကန်စွာ ညွှန်ကြားနိုင်ရန် ဓာတ်ပုံများနှင့်တကွ လေ့လာနိုင်သော ဝဘ်ဆိုက် (camera-angle.komoe.org) ဖြစ်ပါသည်။',
+    url: 'https://camera-angle.komoe.org/',
+    accentColor: 'cyan',
+    icon: '🎥',
+  },
 ];
 
 export const AUDIO_GEMINI_APPS: GeminiAppInfo[] = [

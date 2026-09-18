@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, Languages, Menu, X, Wand2, Bot } from 'lucide-react';
+import { Sparkles, Languages, Menu, X, Wand2, Bot, Video, ExternalLink } from 'lucide-react';
 import { Language, TabType } from '../types';
 import { translations } from '../data/translations';
 import { GEMINI_APPS } from '../data/geminiApps';
@@ -119,6 +119,20 @@ export const Header: React.FC<HeaderProps> = React.memo(({
             </button>
           )}
 
+          {/* Quick Action: Camera Angle Learning Website */}
+          <a
+            id="btn-quick-camera-angles"
+            href="https://camera-angle.komoe.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center space-x-1.5 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 text-xs font-semibold px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl transition shadow-sm cursor-pointer"
+            title="Camera Angle Learning Website for AI Video (camera-angle.komoe.org)"
+          >
+            <Video className="w-4 h-4 text-cyan-400" />
+            <span className="hidden xl:inline">{t.btn_camera_angle_guide}</span>
+            <ExternalLink className="w-3 h-3 text-cyan-400/80 hidden sm:inline" />
+          </a>
+
           {/* Quick Action: Prompt Builder */}
           <button
             id="btn-quick-prompt-builder"
@@ -182,6 +196,23 @@ export const Header: React.FC<HeaderProps> = React.memo(({
               </span>
             </button>
           )}
+
+          <a
+            href="https://camera-angle.komoe.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setMobileMenuOpen(false)}
+            className="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between bg-cyan-600/25 text-cyan-200 border border-cyan-500/40 my-1"
+          >
+            <span className="flex items-center space-x-2.5">
+              <Video className="w-4 h-4 text-cyan-400" />
+              <span>{currentLang === 'en' ? 'Camera Angle Learning' : 'Camera Angle လေ့လာရန်'}</span>
+            </span>
+            <span className="flex items-center space-x-1 text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/30 text-cyan-200 font-mono">
+              <span>komoe.org</span>
+              <ExternalLink className="w-3 h-3" />
+            </span>
+          </a>
 
           <button
             onClick={() => handleTabSelect('overview')}

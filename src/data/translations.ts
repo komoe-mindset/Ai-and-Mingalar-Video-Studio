@@ -169,6 +169,13 @@ export const translations: Record<Language, TranslationDictionary> = {
     btn_copy_stage1_prompt: "Copy Stage 1 (Character Sheet)",
     btn_launch_chatgpt: "Launch in ChatGPT",
     btn_inspect_stages: "Inspect 11 Stages & Rules",
+    btn_camera_angle_guide: "Camera Angle Guide",
+    camera_angle_badge: "Interactive Cinematic Tool",
+    camera_angle_card_title: "Camera Angle Learning Website for AI Video",
+    camera_angle_card_desc: "Visual interactive reference (camera-angle.komoe.org) designed to master 20+ camera angles, shot perspectives (Extreme Close-Up, Low-Angle Hero, Bird's Eye, Dutch Angle, Over-the-Shoulder), and camera motion syntax for Veo 3.1, Runway, and Kling.",
+    btn_open_camera_website: "Launch camera-angle.komoe.org",
+    btn_copy_camera_link: "Copy Website Link",
+    camera_angles_cheat_title: "Quick Camera Angle Cheat Sheet for AI Video",
   },
   my: {
     app_title: "AI ဗီဒီယို Masterclass",
@@ -338,5 +345,12 @@ export const translations: Record<Language, TranslationDictionary> = {
     btn_copy_stage1_prompt: "Stage 1 (Character Sheet) ကူးယူမည်",
     btn_launch_chatgpt: "ChatGPT တွင် ဖွင့်မည်",
     btn_inspect_stages: "အဆင့် ၁၁ ဆင့်ကို ကြည့်ရှုမည်",
+    btn_camera_angle_guide: "ကင်မရာထောင့် လေ့လာရန်",
+    camera_angle_badge: "ရုပ်ရှင်ကင်မရာ အထူးလေ့လာရေး",
+    camera_angle_card_title: "AI ဗီဒီယိုအတွက် Camera Angle လေ့လာရေး ဝဘ်ဆိုက်",
+    camera_angle_card_desc: "Veo 3.1 နှင့် AI ဗီဒီယို မော်ဒယ်များအတွက် ကင်မရာထောင့်ပေါင်း ၂၀ ကျော်၊ Shot အမျိုးအစားများနှင့် လှုပ်ရှားမှုများကို ပုံနှင့်တကွ လက်တွေ့လေ့လာနိုင်သော ဝဘ်ဆိုက် (camera-angle.komoe.org) ဖြစ်ပါသည်။",
+    btn_open_camera_website: "camera-angle.komoe.org သို့ သွားမည်",
+    btn_copy_camera_link: "လင့်ခ် ကူးယူမည်",
+    camera_angles_cheat_title: "AI ဗီဒီယိုတွင် အသုံးများသော ကင်မရာထောင့်များနှင့် Prompts",
   }
 };
