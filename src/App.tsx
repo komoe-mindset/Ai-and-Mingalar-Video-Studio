@@ -84,6 +84,7 @@ export default function App() {
         {activeTab === 'block4' && (
           <AssemblyTab
             currentLang={currentLang}
+            onCopySuccess={showToast}
           />
         )}
 

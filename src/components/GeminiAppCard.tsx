@@ -3,7 +3,7 @@ import { Sparkles, ExternalLink, Copy, Check, Bot } from 'lucide-react';
 import { Language } from '../types';
 
 interface GeminiAppCardProps {
-  blockNumber?: 1 | 2 | 3 | string;
+  blockNumber?: 1 | 2 | 3 | 4 | string;
   title: string;
   subtitle: string;
   description: string;

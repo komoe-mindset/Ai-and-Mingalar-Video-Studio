@@ -1,8 +1,8 @@
 import React from 'react';
-import { ArrowRight, Sparkles, XCircle, CheckCircle2, FolderGit2, Bot, ExternalLink } from 'lucide-react';
+import { ArrowRight, Sparkles, XCircle, CheckCircle2, FolderGit2, Bot, ExternalLink, Headphones, Music } from 'lucide-react';
 import { TabType, Language } from '../types';
 import { translations } from '../data/translations';
-import { GEMINI_APPS } from '../data/geminiApps';
+import { GEMINI_APPS, AUDIO_GEMINI_APPS } from '../data/geminiApps';
 
 interface OverviewTabProps {
   currentLang: Language;
@@ -395,6 +395,68 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ currentLang, onSelectT
             })}
           </div>
         </div>
+
+        {/* Section 3: AI Video BGM Prompts & Sound Testing Studio */}
+        {AUDIO_GEMINI_APPS.length > 0 && (
+          <div className="glass-panel p-6 sm:p-8 rounded-2xl border-rose-500/30 bg-rose-950/10 space-y-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <div className="flex items-center space-x-2">
+                  <span className="px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-xs font-semibold border border-rose-500/30 flex items-center space-x-1">
+                    <Headphones className="w-3.5 h-3.5" />
+                    <span>AI Video Sound & BGM Studio</span>
+                  </span>
+                </div>
+                <h3 className="text-xl font-bold text-white mt-1">
+                  {currentLang === 'en'
+                    ? 'AI Video BGM Prompts & Sound Testing Studio'
+                    : 'AI ဗီဒီယိုများအတွက် အသင့်သုံး BGM Prompts & အသံစမ်းသပ်စတူဒီယို'}
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-400 mt-1">
+                  {currentLang === 'en'
+                    ? 'Pre-engineered Gemini assistant for composing prompt-engineered background music, BPM tempo matching, and audio testing for video spots.'
+                    : 'ဗီဒီယိုကြော်ငြာများအတွက် အလိုက်ဖက်ဆုံး နောက်ခံတေးဂီတ (BGM) Prompts၊ စည်းချက် (BPM) နှင့် အသံစမ်းသပ်မှု သီးသန့် Gemini AI လက်ထောက်။'}
+                </p>
+              </div>
+
+              <a
+                href={AUDIO_GEMINI_APPS[0].url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center space-x-1.5 px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold shadow-md transition shrink-0"
+              >
+                <span>{currentLang === 'en' ? 'Launch Audio Gem' : 'Gemini တေးဂီတ စတူဒီယို ဖွင့်မည်'}</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
+
+            <div className="bg-slate-950 p-5 rounded-xl border border-rose-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-md">
+              <div className="space-y-1.5">
+                <div className="flex items-center space-x-2">
+                  <span className="text-2xl">{AUDIO_GEMINI_APPS[0].icon}</span>
+                  <span className="text-xs font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                    {currentLang === 'en' ? AUDIO_GEMINI_APPS[0].tagEn : AUDIO_GEMINI_APPS[0].tagMy}
+                  </span>
+                </div>
+                <h4 className="text-base font-bold text-white">
+                  {currentLang === 'en' ? AUDIO_GEMINI_APPS[0].titleEn : AUDIO_GEMINI_APPS[0].titleMy}
+                </h4>
+                <p className="text-xs text-slate-400 max-w-2xl leading-relaxed">
+                  {currentLang === 'en' ? AUDIO_GEMINI_APPS[0].descEn : AUDIO_GEMINI_APPS[0].descMy}
+                </p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto shrink-0">
+                <button
+                  onClick={() => onSelectTab('block4')}
+                  className="w-full sm:w-auto px-3.5 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 text-xs font-semibold transition cursor-pointer"
+                >
+                  {currentLang === 'en' ? 'Explore Block 4 Audio Guide →' : 'Block 4 အသံလမ်းညွှန် ကြည့်မည် →'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Long term asset library concept */}

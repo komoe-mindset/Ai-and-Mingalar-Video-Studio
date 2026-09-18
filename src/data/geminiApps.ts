@@ -1,10 +1,10 @@
 export interface GeminiAppInfo {
   id: string;
-  category: 'workflow' | 'visual_reference';
-  blockNumber?: 1 | 2 | 3;
+  category: 'workflow' | 'visual_reference' | 'audio_bgm';
+  blockNumber?: 1 | 2 | 3 | 4;
   tagEn: string;
   tagMy: string;
-  tabKey: 'block1' | 'block2' | 'block3';
+  tabKey: 'block1' | 'block2' | 'block3' | 'block4';
   titleEn: string;
   titleMy: string;
   subtitleEn: string;
@@ -133,8 +133,31 @@ export const VISUAL_REF_GEMINI_APPS: GeminiAppInfo[] = [
   },
 ];
 
-// Preserves indexing: [0]=block1, [1]=block2, [2]=block3, followed by visual references
+export const AUDIO_GEMINI_APPS: GeminiAppInfo[] = [
+  {
+    id: 'ref-bgm-studio',
+    category: 'audio_bgm',
+    blockNumber: 4,
+    tagEn: 'Block 4 • Audio & BGM',
+    tagMy: 'Block 4 • အသံနှင့် တေးဂီတ',
+    tabKey: 'block4',
+    titleEn: 'AI Video BGM Prompts & Sound Testing Studio Gem',
+    titleMy: 'AI ဗီဒီယိုများအတွက် အသင့်သုံး BGM Prompts & အသံစမ်းသပ်စတူဒီယို',
+    subtitleEn: 'Commercial BGM generation prompts, tempo matching, mood scoring & audio studio tests',
+    subtitleMy: 'ကြော်ငြာနောက်ခံတေးဂီတ Prompts၊ စိတ်ခံစားမှုရသနှင့် မြန်မာ့ကြော်ငြာအသံစမ်းသပ်ခန်း',
+    descEn:
+      'Pre-engineered Google Gemini assistant dedicated to composing commercial background music (BGM) prompts, tempo timing (BPM), instrumentation palettes, and mood cues for AI video editors (Google Vids, Suno, Udio, Lyria).',
+    descMy:
+      'ဗီဒီယိုကြော်ငြာများအတွက် အလိုက်ဖက်ဆုံး နောက်ခံတေးဂီတ (BGM) Prompts၊ တေးသွား အရှိန်အဟုန် (BPM) နှင့် အသံရသ အထူးပြုချက်များကို အသင့်ဖန်တီးပေးမည့် သီးသန့် Gemini AI လက်ထောက် ဖြစ်ပါသည်။',
+    url: 'https://share.gemini.google/8OgqLADKpsjG',
+    accentColor: 'rose',
+    icon: '🎵',
+  },
+];
+
+// Preserves indexing: [0]=block1, [1]=block2, [2]=block3, [3-5]=visual references, [6]=BGM studio
 export const GEMINI_APPS: GeminiAppInfo[] = [
   ...WORKFLOW_GEMINI_APPS,
   ...VISUAL_REF_GEMINI_APPS,
+  ...AUDIO_GEMINI_APPS,
 ];

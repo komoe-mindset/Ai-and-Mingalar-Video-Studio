@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { X, Sparkles, ExternalLink, Copy, Check, ArrowRight, Bot, Layers, Image as ImageIcon } from 'lucide-react';
-import { GEMINI_APPS, GeminiAppInfo, WORKFLOW_GEMINI_APPS, VISUAL_REF_GEMINI_APPS } from '../data/geminiApps';
+import { X, Sparkles, ExternalLink, Copy, Check, ArrowRight, Bot, Layers, Image as ImageIcon, Music } from 'lucide-react';
+import { GEMINI_APPS, GeminiAppInfo, WORKFLOW_GEMINI_APPS, VISUAL_REF_GEMINI_APPS, AUDIO_GEMINI_APPS } from '../data/geminiApps';
 import { Language, TabType } from '../types';
 
 interface GeminiAppsModalProps {
@@ -11,7 +11,7 @@ interface GeminiAppsModalProps {
   onCopySuccess: (msg: string) => void;
 }
 
-type ModalFilter = 'all' | 'workflow' | 'reference';
+type ModalFilter = 'all' | 'workflow' | 'reference' | 'audio';
 
 export const GeminiAppsModal: React.FC<GeminiAppsModalProps> = ({
   isOpen,
@@ -46,6 +46,8 @@ export const GeminiAppsModal: React.FC<GeminiAppsModalProps> = ({
       ? WORKFLOW_GEMINI_APPS
       : filter === 'reference'
       ? VISUAL_REF_GEMINI_APPS
+      : filter === 'audio'
+      ? AUDIO_GEMINI_APPS
       : GEMINI_APPS;
 
   return (
@@ -127,16 +129,32 @@ export const GeminiAppsModal: React.FC<GeminiAppsModalProps> = ({
           <button
             id="filter-reference-gems-btn"
             onClick={() => setFilter('reference')}
-            className={`flex-1 py-1.5 px-2.5 rounded-lg transition-all flex items-center justify-center space-x-1.5 cursor-pointer ${
+            className={`flex-1 py-1.5 px-2 rounded-lg transition-all flex items-center justify-center space-x-1 cursor-pointer ${
               filter === 'reference'
                 ? 'bg-indigo-600 text-white shadow-sm'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
             <ImageIcon className="w-3.5 h-3.5" />
-            <span>{currentLang === 'en' ? 'Visual References' : 'Visual References'}</span>
-            <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-white/20 ml-1">
+            <span className="truncate">{currentLang === 'en' ? 'Visuals' : 'Visuals'}</span>
+            <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-white/20 ml-0.5">
               3
+            </span>
+          </button>
+
+          <button
+            id="filter-audio-gems-btn"
+            onClick={() => setFilter('audio')}
+            className={`flex-1 py-1.5 px-2 rounded-lg transition-all flex items-center justify-center space-x-1 cursor-pointer ${
+              filter === 'audio'
+                ? 'bg-rose-600 text-white shadow-sm'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <Music className="w-3.5 h-3.5" />
+            <span className="truncate">{currentLang === 'en' ? 'Audio & BGM' : 'တေးဂီတ/BGM'}</span>
+            <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-white/20 ml-0.5">
+              1
             </span>
           </button>
         </div>
@@ -255,6 +273,10 @@ export const GeminiAppsModal: React.FC<GeminiAppsModalProps> = ({
                         ? currentLang === 'en'
                           ? `Go to Block ${app.blockNumber} Guide`
                           : `Block ${app.blockNumber} လမ်းညွှန်သို့`
+                        : app.category === 'audio_bgm'
+                        ? currentLang === 'en'
+                          ? 'Go to Block 4 (Assembly & Audio) Guide'
+                          : 'Block 4 (Audio & Assembly) လမ်းညွှန်သို့'
                         : currentLang === 'en'
                         ? `Open Related Guide (${app.tabKey.toUpperCase()})`
                         : `${app.tabKey.toUpperCase()} လမ်းညွှန်သို့`}
